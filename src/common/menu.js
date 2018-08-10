@@ -2,6 +2,18 @@ import { isUrl } from '../utils/utils';
 
 const menuData = [
   {
+    name: '人员管理',
+    icon: 'team',
+    path: 'admin',
+    children: [
+      {
+        name: '添加管理员',
+        path: 'addAdmin',
+        icon: 'user-add',
+      }
+    ]
+  },
+  {
     name: '测试',
     icon: 'dashboard',
     path: 'test',

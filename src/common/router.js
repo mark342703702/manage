@@ -74,6 +74,9 @@ export const getRouterData = app => {
     '/': {
       component: dynamicWrapper(app, ['m_login'], () => import('../layouts/BasicLayout')),
     }, 
+    '/admin/addAdmin' : {
+      component: dynamicWrapper(app, ['test'], () => import('../routes/Admin/addAdmin')),
+    },
     '/test/test' : {
       component: dynamicWrapper(app, ['test'], () => import('../routes/Test/Test')),
     },
