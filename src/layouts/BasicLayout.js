@@ -114,7 +114,7 @@ class BasicLayout extends React.PureComponent {
     });
     const { dispatch } = this.props;
     dispatch({
-      type: 'user/fetchCurrent',
+      type: 'm_login/getCurrentUser',
     });
   }
 
@@ -163,48 +163,42 @@ class BasicLayout extends React.PureComponent {
   handleMenuCollapse = collapsed => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'global/changeLayoutCollapsed',
+      type: 'm_global/changeLayoutCollapsed',
       payload: collapsed,
     });
   };
 
-  handleNoticeClear = type => {
-    message.success(`清空了${type}`);
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'global/clearNotices',
-      payload: type,
-    });
-  };
+  // handleNoticeClear = type => {
+  //   message.success(`清空了${type}`);
+  //   const { dispatch } = this.props;
+  //   dispatch({
+  //     type: 'global/clearNotices',
+  //     payload: type,
+  //   });
+  // };
 
   handleMenuClick = ({ key }) => {
     const { dispatch } = this.props;
-    if (key === 'triggerError') {
-      dispatch(routerRedux.push('/exception/trigger'));
-      return;
-    }
     if (key === 'logout') {
       dispatch({
-        type: 'login/logout',
+        type: 'm_login/logout',
       });
     }
   };
 
-  handleNoticeVisibleChange = visible => {
-    const { dispatch } = this.props;
-    if (visible) {
-      dispatch({
-        type: 'global/fetchNotices',
-      });
-    }
-  };
+  // handleNoticeVisibleChange = visible => {
+  //   const { dispatch } = this.props;
+  //   if (visible) {
+  //     dispatch({
+  //       type: 'global/fetchNotices',
+  //     });
+  //   }
+  // };
 
   render() {
     const {
       currentUser,
       collapsed,
-      fetchingNotices,
-      notices,
       routerData,
       match,
       location,
@@ -216,8 +210,6 @@ class BasicLayout extends React.PureComponent {
         <SiderMenu
           logo={logo}
           // 不带Authorized参数的情况下如果没有权限,会强制跳到403界面
-          // If you do not have the Authorized parameter
-          // you will be forced to jump to the 403 interface without permission
           Authorized={Authorized}
           menuData={getMenuData()}
           collapsed={collapsed}
@@ -230,14 +222,10 @@ class BasicLayout extends React.PureComponent {
             <GlobalHeader
               logo={logo}
               currentUser={currentUser}
-              fetchingNotices={fetchingNotices}
-              notices={notices}
               collapsed={collapsed}
               isMobile={mb}
-              onNoticeClear={this.handleNoticeClear}
               onCollapse={this.handleMenuCollapse}
               onMenuClick={this.handleMenuClick}
-              onNoticeVisibleChange={this.handleNoticeVisibleChange}
             />
           </Header>
           <Content style={{ margin: '24px 24px 0', height: '100%' }}>
@@ -302,9 +290,7 @@ class BasicLayout extends React.PureComponent {
   }
 }
 
-export default connect(({ user, global = {}, loading }) => ({
-  currentUser: user.currentUser,
-  collapsed: global.collapsed,
-  fetchingNotices: loading.effects['global/fetchNotices'],
-  notices: global.notices,
+export default connect(({ m_global = {}, m_login }) => ({
+  currentUser: m_login.currentUser,
+  collapsed: m_global.collapsed,
 }))(BasicLayout);

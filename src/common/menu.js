@@ -4,11 +4,11 @@ const menuData = [
   {
     name: '测试',
     icon: 'dashboard',
-    path: 'user',
+    path: 'test',
     children: [
       {
         name: '分析页',
-        path: '/test/test',
+        path: 'test',
       }
     ]
   }

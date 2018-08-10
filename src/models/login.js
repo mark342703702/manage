@@ -40,6 +40,7 @@ export default {
         yield put(routerRedux.replace(redirect || '/'));
       }
     },
+
     *logout(_, { put }) {
       yield put({
         type: 'changeLoginStatus',
@@ -57,7 +58,8 @@ export default {
           }),
         })
       );
-    },
+    }
+
   },
 
   reducers: {

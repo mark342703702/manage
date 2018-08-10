@@ -47,7 +47,7 @@ function checkStatus(response) {
 
 export default {
     /*
-    type: 请求方式,默认post
+    type: 请求方式,默认GET
     url: 请求地址
     data: 请求数据
     flag: 参数序列化标识,默认为true
@@ -56,7 +56,7 @@ export default {
     getData(opt) {
         // 默认属性
         let optDefault = {
-            type: 'POST',
+            type: 'GET',
             url: '',
             data: {},
             flag: true,
@@ -71,6 +71,7 @@ export default {
         const opts = {
             headers: {
                 "Content-Type": optNew.cType,
+                'x-access-token': Cookies.get('token') || ''
             },
             method: optNew.type,
             baseURL: baseUrl,

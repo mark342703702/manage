@@ -10,7 +10,6 @@ const { ConnectedRouter } = routerRedux;
 const { AuthorizedRoute } = Authorized;
 
 function RouterConfig({ history, app }) {
-
   const routerData = getRouterData(app);
   const BasicLayout = routerData['/'].component;
   const UserLayout = routerData['/user'].component;
@@ -22,7 +21,7 @@ function RouterConfig({ history, app }) {
           <AuthorizedRoute
             path="/"
             render={props => <BasicLayout {...props} />}
-            authority={['admin', 'girl']}
+            authority={['admin', 'girl', 'superAdmin']}
             redirectPath={getQueryPath('/user/login', {
               redirect: window.location.href,
             })}

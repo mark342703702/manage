@@ -49,7 +49,7 @@ export default class Test extends React.Component {
                         <UserName name="adminName" placeholder="管理员姓名" />
                         <Password name="adminPassword" placeholder="密码" />
                     </Tab>
-                    <Tab key="girl" tab="职员登陆">
+                    <Tab key="girl" disabled tab="职员登陆">
                         <UserName name="girlName" placeholder="职员姓名" />
                         <Password name="girlPassword" placeholder="密码" />
                     </Tab>
