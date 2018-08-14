@@ -14,6 +14,18 @@ const menuData = [
     ]
   },
   {
+    name : '微信管理',
+    icon : 'wechat',
+    path : 'weChat',
+    children : [
+      {
+        name: '活动管理',
+        path: 'activity',
+        icon: 'gift',
+      }
+    ]
+  },
+  {
     name: '测试',
     icon: 'dashboard',
     path: 'test',

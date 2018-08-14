@@ -77,6 +77,9 @@ export const getRouterData = app => {
     '/admin/addAdmin' : {
       component: dynamicWrapper(app, ['test'], () => import('../routes/Admin/addAdmin')),
     },
+    '/weChat/activity' : {
+      component: dynamicWrapper(app, ['test'], () => import('../routes/WeChat/activity')),
+    },
     '/test/test' : {
       component: dynamicWrapper(app, ['test'], () => import('../routes/Test/Test')),
     },
