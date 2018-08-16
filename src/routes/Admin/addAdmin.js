@@ -2,8 +2,9 @@ import React from 'react';
 // import { connect } from 'dva';
 import { Link } from 'dva/router';
 import PageHeader from '../../components/PageHeader';
-import { Card, Form, Input, Icon, Button, Select, upload } from 'antd';
+import { Card, Form, Input, Icon, Button, Select, Upload, message, Spin, Tooltip} from 'antd';
 import styles from './addAdmin.less';
+import { http_server } from '../../config/config';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -12,7 +13,10 @@ const Option = Select.Option;
 export default class Test extends React.Component {
     state = {
         //确认密码框是否输入
-        confirmDirty : false
+        confirmDirty : false,
+
+        //加载中图标
+        loading : false,
     }
 
     componentDidMount() {
@@ -24,7 +28,7 @@ export default class Test extends React.Component {
 
     handleSubmit = (e) =>{
         e.preventDefault();
-        console.log('s')
+        console.log(this.props.form.getFieldsValue())
     }
 
     //检查密码
@@ -52,8 +56,57 @@ export default class Test extends React.Component {
         this.setState({ confirmDirty: this.state.confirmDirty || !!value });
     }
 
+    //上传头像前检查
+    beforeUpload = ( file ) =>{
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if(!isLt2M) {
+            message.error('上传图片不能超过2m');
+        }
+        return isLt2M;
+    }
+
+    //上传头像进度
+    onImageChange = (info) =>{
+
+        if (info.file.status === 'uploading') {
+            this.setState({
+                loading : true
+            })
+            return;
+        }
+
+        if (info.file.status === 'done') {
+            this.setState({
+                loading : false
+            }, ()=>{ message.success('上传成功') })
+            return;
+        }
+    }
+
+    //上传头像只能上传一次
+    ImageOneCheck = () => {
+        let value = this.props.form.getFieldValue('upload');
+        if( typeof(value) === "undefined" ){
+            return false;
+        }else{
+            if(value.length === 0){
+                return false;
+            }else{
+                return true;
+            }
+        }
+    }
+
+    normFile = (e) => {
+        if (Array.isArray(e)) {
+          return e;
+        }
+        return e && e.fileList;
+    }
+
     render(){
         const { form } = this.props;
+        const { loading } = this.state;
         const { getFieldDecorator, getFieldsError, isFieldTouched, getFieldError} = form;
 
         const nameError = isFieldTouched('name') && getFieldError('name');
@@ -90,7 +143,7 @@ export default class Test extends React.Component {
         };
 
         return(
-            <div className={styles.layout}>
+            <div className={`${styles.layout} adminForm`}>
                <PageHeader
                 className="tabs"
                 title={<div className="title">添加管理员</div>}
@@ -98,6 +151,7 @@ export default class Test extends React.Component {
                 breadcrumbList={breadcrumbList}
                 linkElement	= {Link}
                 />
+                <Spin spinning={ loading }>
                 <Card bordered={false} className={styles.form}>
                     <Form onSubmit={this.handleSubmit}>
                         <FormItem label="姓名" {...formItemLayout} 
@@ -167,6 +221,27 @@ export default class Test extends React.Component {
                                 <Input type="password" placeholder="请再次输入密码" onBlur={this.handleConfirmBlur}/>
                             )}
                         </FormItem>
+                        <FormItem {...formItemLayout} label={(
+                            <span>
+                                头像&nbsp;
+                                <Tooltip title="不上传则使用默认头像">
+                                    <Icon type="question-circle-o" />
+                                </Tooltip>
+                            </span>
+                        )}>
+                        {getFieldDecorator('upload', {
+                            valuePropName: 'fileList',
+                            getValueFromEvent : this.normFile,
+                        })(
+                            <Upload name="avatar" listType="picture" accept ="image/jpg,image/jpeg,image/png,image/bmp"
+                            beforeUpload={this.beforeUpload} className={'upload-list-inline'} onChange={this.onImageChange}
+                            data = {{type : 'adminAvatar'}} withCredentials action={`${http_server}/upload/avatar`}>
+                                <Button disabled={this.ImageOneCheck()}>
+                                    <Icon type="upload" />上传图片
+                                </Button>
+                            </Upload>
+                        )}
+                        </FormItem>
                         <FormItem {...submitFormLayout}>
                             <Button type="primary" htmlType="submit" style={{width:'100%'}} 
                             icon="user-add" disabled={this.hasErrors(getFieldsError())}>
@@ -175,6 +250,7 @@ export default class Test extends React.Component {
                         </FormItem>
                     </Form>
                 </Card>
+                </Spin>
             </div>
         )
     }
