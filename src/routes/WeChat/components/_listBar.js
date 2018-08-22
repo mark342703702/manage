@@ -5,10 +5,11 @@ const { Meta } = Card;
 export default class ListBar extends React.Component {
 
     render(){
+        const { ACplusFun } = this.props; 
         return (
             <div className={styles.layout}>
                 <div className={`${styles.item} ${styles.add}`}>
-                  <Button type="dashed" className={styles.newButton}>
+                  <Button type="dashed" className={styles.newButton} onClick={ACplusFun}>
                         <Icon type="plus" /> 新增产品
                   </Button>
                 </div>
